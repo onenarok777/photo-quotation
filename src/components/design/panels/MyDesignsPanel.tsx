@@ -26,12 +26,12 @@ export const MyDesignsPanel: React.FC<MyDesignsPanelProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="w-full h-[60vh] md:h-full md:w-[300px] md:min-w-[300px] bg-[#181820] flex flex-col border-t md:border-t-0 md:border-r border-white/5 shadow-2xl z-10 flex-shrink-0 absolute bottom-0 md:relative rounded-t-2xl md:rounded-none">
+    <div className="w-full h-[60vh] md:h-full md:w-[300px] md:min-w-[300px] bg-panel flex flex-col border-t md:border-t-0 md:border-r border-border-base shadow-2xl z-10 flex-shrink-0 absolute bottom-0 md:relative rounded-t-2xl md:rounded-none transition-colors duration-300">
       {/* Header Section */}
-      <div className="p-6 pb-4 space-y-4 border-b border-white/5">
+      <div className="p-6 pb-4 space-y-4 border-b border-border-base">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold text-white tracking-tight">My Designs</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+          <h2 className="text-xl font-bold text-txt-primary tracking-tight transition-colors duration-300">My Designs</h2>
+          <button onClick={onClose} className="text-txt-muted hover:text-txt-primary transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -45,11 +45,11 @@ export const MyDesignsPanel: React.FC<MyDesignsPanelProps> = ({ onClose }) => {
         </button>
 
         <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-txt-muted" />
           <input 
             type="text" 
             placeholder="Search designs..." 
-            className="w-full bg-[#2a2a35] text-sm text-gray-200 pl-9 pr-4 py-2.5 rounded-lg border border-transparent focus:border-indigo-500/50 focus:bg-[#2f2f3d] outline-none transition-all placeholder:text-gray-600"
+            className="w-full bg-input text-sm text-txt-primary pl-9 pr-4 py-2.5 rounded-lg border border-transparent focus:border-brand/50 focus:bg-panel outline-none transition-all placeholder:text-txt-muted"
           />
         </div>
       </div>
@@ -63,18 +63,18 @@ export const MyDesignsPanel: React.FC<MyDesignsPanelProps> = ({ onClose }) => {
               <div key={design.id} className="group relative flex flex-col">
                 <div 
                   onClick={() => handleLoadDesign(design)}
-                  className={`aspect-[4/3] bg-[#2a2a35] rounded-xl overflow-hidden relative mb-2 shadow-md transition-all duration-300 cursor-pointer border ${
+                  className={`aspect-[4/3] bg-input rounded-xl overflow-hidden relative mb-2 shadow-md transition-all duration-300 cursor-pointer border ${
                     isSelected 
-                      ? 'border-indigo-500 ring-2 ring-indigo-500/50 shadow-xl' 
-                      : 'border-white/5 group-hover:shadow-xl group-hover:ring-2 ring-indigo-500/50'
+                      ? 'border-brand ring-2 ring-brand/50 shadow-xl' 
+                      : 'border-border-base group-hover:shadow-xl group-hover:ring-2 ring-brand/50'
                   }`}
                 >
                   {/* Thumbnail */}
                   {design.thumbnail ? (
                     <img src={design.thumbnail} alt={design.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 gap-2">
-                       <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                    <div className="w-full h-full flex flex-col items-center justify-center text-txt-muted gap-2">
+                       <div className="w-8 h-8 rounded-full bg-hover flex items-center justify-center">
                           <ImageIcon size={14} />
                        </div>
                        <span className="text-[10px] font-medium uppercase tracking-wider">No Preview</span>
@@ -113,8 +113,8 @@ export const MyDesignsPanel: React.FC<MyDesignsPanelProps> = ({ onClose }) => {
                   </button>
                 </div>
                 <div className="px-1">
-                  <h3 className="text-sm text-gray-200 font-medium truncate group-hover:text-indigo-400 transition-colors">{design.name}</h3>
-                  <p className="text-[10px] text-gray-500">Last edited just now</p>
+                  <h3 className="text-sm text-txt-secondary font-medium truncate group-hover:text-brand transition-colors">{design.name}</h3>
+                  <p className="text-[10px] text-txt-muted">Last edited just now</p>
                 </div>
               </div>
             );

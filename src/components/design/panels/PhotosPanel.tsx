@@ -13,9 +13,9 @@ export const PhotosPanel: React.FC<PhotosPanelProps> = ({ onAddImage }) => {
   };
 
   return (
-    <div className="h-full w-[320px] bg-[#181820] flex flex-col border-r border-white/5">
+    <div className="h-full w-[320px] bg-panel flex flex-col border-r border-border-base">
       <div className="p-4">
-        <h3 className="text-white font-medium mb-4">Photos</h3>
+        <h3 className="text-txt-primary font-medium mb-4">Photos</h3>
         
         <div className="relative w-full">
           <input 
@@ -26,8 +26,8 @@ export const PhotosPanel: React.FC<PhotosPanelProps> = ({ onAddImage }) => {
             onChange={handleImageUpload}
           />
           <label htmlFor="panel-image-upload" className="w-full block cursor-pointer">
-              <div className="w-full py-3 px-4 bg-[#2a2a35] hover:bg-[#32323f] text-white rounded-lg transition-colors flex items-center gap-3 group border border-dashed border-gray-600 hover:border-gray-400">
-              <div className="w-8 h-8 rounded bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:text-blue-300">
+              <div className="w-full py-3 px-4 bg-input hover:bg-hover text-txt-primary rounded-lg transition-colors flex items-center gap-3 group border border-dashed border-border-base hover:border-txt-muted">
+              <div className="w-8 h-8 rounded bg-brand/20 flex items-center justify-center text-brand group-hover:text-brand-hover">
                 <ImageIcon size={18} />
               </div>
               <span className="text-sm">Upload Image</span>

@@ -123,7 +123,7 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
   return (
     <div 
       ref={containerRef}
-      className="flex-1 bg-[#0f0f13] overflow-hidden flex justify-center items-center relative w-full h-full"
+      className="flex-1 bg-canvas overflow-hidden flex justify-center items-center relative w-full h-full"
     >
       {/* ... (Background Pattern) */}
 
@@ -211,26 +211,26 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
       </Stage>
 
       {/* Zoom Controls */}
-      <div className="absolute bottom-6 right-6 flex items-center gap-1 bg-[#181820]/90 backdrop-blur-xl p-1.5 rounded-full shadow-2xl border border-white/10">
+      <div className="absolute bottom-6 right-6 flex items-center gap-1 bg-panel/90 backdrop-blur-xl p-1.5 rounded-full shadow-2xl border border-border-base">
         <button 
           onClick={() => setScale(s => Math.max(0.1, s - 0.1))}
-          className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-txt-muted hover:text-txt-primary hover:bg-hover rounded-full transition-colors"
         >
           <ZoomOut size={16} />
         </button>
-        <div className="px-2 text-xs text-gray-300 font-medium min-w-[48px] text-center font-mono">
+        <div className="px-2 text-xs text-txt-secondary font-medium min-w-[48px] text-center font-mono">
           {Math.round(scale * 100)}%
         </div>
         <button 
           onClick={() => setScale(s => Math.min(5, s + 0.1))}
-          className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-txt-muted hover:text-txt-primary hover:bg-hover rounded-full transition-colors"
         >
           <ZoomIn size={16} />
         </button>
-        <div className="w-px h-4 bg-white/10 mx-1" />
+        <div className="w-px h-4 bg-border-base mx-1" />
         <button 
           onClick={centerArtboard}
-          className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-txt-muted hover:text-txt-primary hover:bg-hover rounded-full transition-colors"
           title="Fit to Screen"
         >
           <Maximize size={16} />

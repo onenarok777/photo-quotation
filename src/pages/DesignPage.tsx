@@ -65,7 +65,7 @@ export const DesignPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#1e1e2e] overflow-hidden">
+    <div className="flex flex-col h-screen w-full bg-app overflow-hidden transition-colors duration-300">
       {/* Top Navigation */}
       <Navbar />
 
@@ -82,7 +82,7 @@ export const DesignPage = () => {
           {renderActivePanel()}
 
           {/* Main Canvas Area */}
-          <div className="flex-1 relative bg-[#0f0f13] overflow-hidden flex flex-col">
+          <div className="flex-1 relative bg-canvas overflow-hidden flex flex-col transition-colors duration-300">
             {artboard && (
               <CanvasToolbar 
                 showProperties={showProperties} 
@@ -100,9 +100,9 @@ export const DesignPage = () => {
                   onChange={updateElementProps}
                 />
               ) : (
-                <div className="text-gray-500 flex flex-col items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center">
-                    <div className="w-8 h-8 border-2 border-gray-600 border-dashed rounded-lg" />
+                <div className="text-txt-muted flex flex-col items-center gap-4 transition-colors duration-300">
+                  <div className="w-16 h-16 rounded-2xl bg-hover flex items-center justify-center transition-colors duration-300">
+                    <div className="w-8 h-8 border-2 border-txt-muted border-dashed rounded-lg transition-colors duration-300" />
                   </div>
                   <p>Select a design to start editing</p>
                 </div>

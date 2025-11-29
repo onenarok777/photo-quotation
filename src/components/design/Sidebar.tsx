@@ -1,5 +1,5 @@
 import React from 'react';
-import { Folder } from 'lucide-react';
+import { Folder, Image as ImageIcon } from 'lucide-react';
 
 interface SidebarProps {
   activeItem: string | null;
@@ -12,11 +12,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const MENU_ITEMS = [
     { id: 'my-designs', icon: Folder, label: 'My Designs' },
+    { id: 'photos', icon: ImageIcon, label: 'Photos' },
   ];
 
   return (
     <div className="flex-shrink-0 z-50 w-full h-16 md:w-auto md:h-full">
-      <div className="w-full h-full md:w-[72px] bg-[#181820] border-t md:border-t-0 md:border-r border-white/5 flex flex-row md:flex-col items-center justify-between md:justify-start py-0 md:py-4 px-4 md:px-0 relative">
+      <div className="w-full h-full md:w-[72px] bg-panel border-t md:border-t-0 md:border-r border-border-base flex flex-row md:flex-col items-center justify-between md:justify-start py-0 md:py-4 px-4 md:px-0 relative transition-colors duration-300">
         
         {/* Ambient Glow */}
         <div className="absolute top-0 left-0 w-full h-full md:h-32 bg-indigo-500/10 blur-[40px] pointer-events-none" />
@@ -31,8 +32,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => onSelectItem(item.id)}
                 className={`flex flex-col items-center justify-center w-auto md:w-full aspect-square md:aspect-square rounded-lg relative group transition-all duration-200 p-2 md:p-0 ${
                   isActive 
-                    ? 'text-indigo-400' 
-                    : 'text-gray-400 hover:text-gray-200'
+                    ? 'text-brand' 
+                    : 'text-txt-muted hover:text-txt-primary'
                 }`}
               >
                  {/* Active Indicator (Desktop) */}

@@ -44,15 +44,15 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ showProperties, on
   const isValidName = tempName.trim().length > 0;
 
   return (
-    <div className="h-12 bg-[#181820] border-b border-white/5 flex items-center px-4 gap-2">
+    <div className="h-12 bg-panel border-b border-border-base flex items-center px-4 gap-2 transition-colors duration-300">
       <div className="flex items-center gap-1">
         <button
           onClick={undo}
           disabled={!canUndo}
           className={`p-2 rounded-lg transition-colors ${
             canUndo
-              ? 'text-gray-300 hover:text-white hover:bg-white/10'
-              : 'text-gray-600 cursor-not-allowed'
+              ? 'text-txt-muted hover:text-txt-primary hover:bg-hover'
+              : 'text-txt-muted opacity-50 cursor-not-allowed'
           }`}
           title="Undo"
         >
@@ -63,8 +63,8 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ showProperties, on
           disabled={!canRedo}
           className={`p-2 rounded-lg transition-colors ${
             canRedo
-              ? 'text-gray-300 hover:text-white hover:bg-white/10'
-              : 'text-gray-600 cursor-not-allowed'
+              ? 'text-txt-muted hover:text-txt-primary hover:bg-hover'
+              : 'text-txt-muted opacity-50 cursor-not-allowed'
           }`}
           title="Redo"
         >
@@ -72,7 +72,7 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ showProperties, on
         </button>
       </div>
 
-      <div className="w-px h-6 bg-white/10 mx-2" />
+      <div className="w-px h-6 bg-border-base mx-2" />
 
       {isEditing ? (
         <div className="flex items-center gap-1">
@@ -80,7 +80,7 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ showProperties, on
             type="text"
             value={tempName}
             onChange={(e) => setTempName(e.target.value)}
-            className="bg-[#2a2a35] text-white text-sm px-2 py-1 rounded border border-indigo-500/50 outline-none min-w-[150px]"
+            className="bg-input text-txt-primary text-sm px-2 py-1 rounded border border-brand/50 outline-none min-w-[150px]"
             placeholder="Enter design name"
             autoFocus
             onKeyDown={(e) => {
@@ -91,14 +91,14 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ showProperties, on
           <button
             onClick={handleSave}
             disabled={!isValidName}
-            className={`p-1 rounded hover:bg-white/10 transition-colors ${isValidName ? 'text-green-400' : 'text-gray-600'}`}
+            className={`p-1 rounded hover:bg-hover transition-colors ${isValidName ? 'text-green-500' : 'text-txt-muted'}`}
             title="Save"
           >
             <Check size={16} />
           </button>
           <button
             onClick={handleCancel}
-            className="p-1 rounded hover:bg-white/10 text-red-400 transition-colors"
+            className="p-1 rounded hover:bg-hover text-red-500 transition-colors"
             title="Cancel"
           >
             <X size={16} />
@@ -106,7 +106,7 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ showProperties, on
         </div>
       ) : (
         <div className="flex items-center gap-2 group">
-          <span className="text-sm text-gray-300 font-medium px-2 py-1">
+          <span className="text-sm text-txt-secondary font-medium px-2 py-1">
             {artboard?.name || 'Untitled Design'}
           </span>
           <button
@@ -114,7 +114,7 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ showProperties, on
               setTempName(artboard?.name || '');
               setIsEditing(true);
             }}
-            className="p-1.5 rounded-lg text-gray-500 hover:text-white hover:bg-white/10 opacity-0 group-hover:opacity-100 transition-all"
+            className="p-1.5 rounded-lg text-txt-muted hover:text-txt-primary hover:bg-hover opacity-0 group-hover:opacity-100 transition-all"
             title="Edit Name"
           >
             <Pencil size={14} />
@@ -126,8 +126,8 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({ showProperties, on
         onClick={onToggleProperties}
         className={`ml-auto p-2 rounded-lg transition-colors ${
           showProperties
-            ? 'text-indigo-400 bg-indigo-500/10'
-            : 'text-gray-400 hover:text-white hover:bg-white/10'
+            ? 'text-brand bg-brand/10'
+            : 'text-txt-muted hover:text-txt-primary hover:bg-hover'
         }`}
         title="Toggle Properties"
       >
