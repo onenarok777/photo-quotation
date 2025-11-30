@@ -1,5 +1,5 @@
 import React from 'react';
-import { Folder, Image as ImageIcon } from 'lucide-react';
+import { Folder, Image as ImageIcon, Upload } from 'lucide-react';
 
 interface SidebarProps {
   activeItem: string | null;
@@ -12,6 +12,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const MENU_ITEMS = [
     { id: 'my-designs', icon: Folder, label: 'My Designs' },
+    { id: 'upload', icon: Upload, label: 'Upload' },
     { id: 'photos', icon: ImageIcon, label: 'Photos' },
   ];
 

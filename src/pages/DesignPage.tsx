@@ -6,6 +6,7 @@ import { PropertiesPanel } from '@/components/design/PropertiesPanel';
 import { MyDesignsPanel } from '@/components/design/panels/MyDesignsPanel';
 import { TextPanel } from '@/components/design/panels/TextPanel';
 import { IconsPanel } from '@/components/design/panels/IconsPanel';
+import { UploadPanel } from '@/components/design/panels/UploadPanel';
 import { PhotosPanel } from '@/components/design/panels/PhotosPanel';
 import { CanvasToolbar } from '@/components/design/CanvasToolbar';
 import { useEditorStore } from '@/stores/useEditorStore';
@@ -39,8 +40,8 @@ export const DesignPage = () => {
         return <TextPanel onAddText={() => addElementText('New Text')} />;
       case 'icons':
         return <IconsPanel onAddRectangle={addElementRect} onAddCircle={addElementCircle} />;
-      case 'photos':
-        return <PhotosPanel onAddImage={(file) => {
+      case 'upload':
+        return <UploadPanel onAddImage={(file) => {
            const reader = new FileReader();
            reader.onload = () => {
              if (typeof reader.result === 'string') {
@@ -49,6 +50,10 @@ export const DesignPage = () => {
            };
            reader.readAsDataURL(file);
         }} />;
+      case 'photos':
+        return <PhotosPanel 
+          onSelectImage={(url) => addElementImage(url, 250, 250)}
+        />;
       default:
         return null; 
     }
