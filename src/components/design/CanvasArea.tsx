@@ -12,6 +12,7 @@ interface CanvasAreaProps {
   artboard: Artboard;
   onSelect: (id: string | null) => void;
   onChange: (id: string, attrs: any) => void;
+  onDropImage?: (url: string, x: number, y: number) => void;
 }
 
 const URLImage = ({ image, ...props }: any) => {
@@ -25,6 +26,7 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
   artboard,
   onSelect,
   onChange,
+  onDropImage,
 }) => {
   const trRef = useRef<any>(null);
   const stageRef = useRef<any>(null);
@@ -138,6 +140,72 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
         scaleY={scale}
         x={position.x}
         y={position.y}
+        onDragOver={(e: any) => {
+          e.evt.preventDefault();
+        }}
+        onDrop={(e: any) => {
+          e.evt.preventDefault();
+          
+          const stage = stageRef.current;
+          stage.setPointersPositions(e.evt);
+          const pointerPosition = stage.getPointerPosition();
+          const x = (pointerPosition.x - stage.x()) / stage.scaleX();
+          const y = (pointerPosition.y - stage.y()) / stage.scaleY();
+
+          // Handle internal image drag (from Photos panel)
+          const imageUrl = e.evt.dataTransfer.getData('image/url');
+          if (imageUrl) {
+             if (onDropImage) {
+               onDropImage(imageUrl, x, y);
+             }
+             return;
+          }
+
+          // Handle external image drag (e.g. from other websites)
+          console.log('Drop event types:', e.evt.dataTransfer.types);
+          const uriList = e.evt.dataTransfer.getData('text/uri-list');
+          const textPlain = e.evt.dataTransfer.getData('text/plain');
+          const textHtml = e.evt.dataTransfer.getData('text/html');
+          console.log('uri-list:', uriList);
+          console.log('text/plain:', textPlain);
+          console.log('text/html:', textHtml);
+
+          let externalUrl = uriList || textPlain;
+
+          // Try to extract src from HTML if available and no URL found yet
+          if (!externalUrl && textHtml) {
+            const srcMatch = textHtml.match(/src=["'](.*?)["']/);
+            if (srcMatch) {
+              externalUrl = srcMatch[1];
+              console.log('Extracted URL from HTML:', externalUrl);
+            }
+          }
+
+          if (externalUrl && (externalUrl.startsWith('http') || externalUrl.startsWith('data:image'))) {
+             // Clean up URL if it contains multiple lines or extra text
+             externalUrl = externalUrl.split('\n')[0].trim();
+             
+             if (onDropImage) {
+               onDropImage(externalUrl, x, y);
+             }
+             return;
+          }
+
+          // Handle file drop (from desktop)
+          const files = e.evt.dataTransfer.files;
+          if (files && files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith('image/')) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                if (typeof reader.result === 'string' && onDropImage) {
+                  onDropImage(reader.result, x, y);
+                }
+              };
+              reader.readAsDataURL(file);
+            }
+          }
+        }}
       >
         <Layer>
           {/* Artboard Background */}
@@ -193,7 +261,7 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
             } else if (item.type === 'text') {
               return <Text key={item.id} {...commonProps} text={item.text} fontSize={item.fontSize} fill={item.fill} />;
             } else if (item.type === 'image') {
-              return <URLImage key={item.id} {...commonProps} image={item.image} width={item.width} height={item.height} />;
+              return <URLImage key={item.id} {...commonProps} image={item} width={item.width} height={item.height} />;
             }
             return null;
           })}
@@ -205,6 +273,12 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
                 if (newBox.width < 5 || newBox.height < 5) return oldBox;
                 return newBox;
               }}
+              borderStroke="#0066FF"
+              borderStrokeWidth={2}
+              anchorStroke="#0066FF"
+              anchorFill="#FFFFFF"
+              anchorSize={8}
+              anchorCornerRadius={2}
             />
           )}
         </Layer>

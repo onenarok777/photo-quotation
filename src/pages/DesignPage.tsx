@@ -103,6 +103,7 @@ export const DesignPage = () => {
                   artboard={artboard}
                   onSelect={handleSelectElement}
                   onChange={updateElementProps}
+                  onDropImage={(url, x, y) => addElementImage(url, x, y)}
                 />
               ) : (
                 <div className="text-txt-muted flex flex-col items-center gap-4 transition-colors duration-300">

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Artboard } from '@/types/editor.types';
+import { LayersSection } from './LayersSection';
 
 interface PropertiesPanelProps {
   selectedId: string | null;
@@ -27,55 +28,60 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     if (!artboard) return null;
 
     return (
-      <div className="w-full md:w-64 bg-panel h-auto md:h-full p-4 border-t md:border-t-0 md:border-l border-border-base overflow-y-auto text-txt-secondary absolute bottom-0 md:relative z-20 shadow-2xl md:shadow-none max-h-[50vh] md:max-h-full">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-txt-primary">Artboard Settings</h2>
-          <button onClick={onClose} className="md:hidden text-txt-muted">Close</button>
-        </div>
+      <div className="w-full md:w-64 bg-panel h-auto md:h-full border-t md:border-t-0 md:border-l border-border-base text-txt-secondary absolute bottom-0 md:relative z-20 shadow-2xl md:shadow-none max-h-[50vh] md:max-h-full flex flex-col">
+        <div className="p-4 flex-1 overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-txt-primary">Artboard Settings</h2>
+            <button onClick={onClose} className="md:hidden text-txt-muted">Close</button>
+          </div>
 
-        <div className="form-control w-full mb-2">
-          <label className="label">
-            <span className="label-text text-txt-muted">Width (px)</span>
-          </label>
-          <input
-            type="number"
-            className="input input-bordered w-full bg-input border-border-base text-txt-primary"
-            value={artboard.width}
-            onChange={(e) => onUpdateArtboard({ width: Number(e.target.value) })}
-          />
-        </div>
-
-        <div className="form-control w-full mb-2">
-          <label className="label">
-            <span className="label-text text-txt-muted">Height (px)</span>
-          </label>
-          <input
-            type="number"
-            className="input input-bordered w-full bg-input border-border-base text-txt-primary"
-            value={artboard.height}
-            onChange={(e) => onUpdateArtboard({ height: Number(e.target.value) })}
-          />
-        </div>
-
-        <div className="form-control w-full mb-2">
-          <label className="label">
-            <span className="label-text text-txt-muted">Background Color</span>
-          </label>
-          <div className="flex gap-2">
+          <div className="form-control w-full mb-2">
+            <label className="label">
+              <span className="label-text text-txt-muted">Width (px)</span>
+            </label>
             <input
-              type="color"
-              className="input input-bordered w-10 h-10 p-1 bg-input border-border-base"
-              value={artboard.background}
-              onChange={(e) => onUpdateArtboard({ background: e.target.value })}
-            />
-            <input
-              type="text"
-              className="input input-bordered flex-1 bg-input border-border-base text-txt-primary uppercase"
-              value={artboard.background}
-              onChange={(e) => onUpdateArtboard({ background: e.target.value })}
+              type="number"
+              className="input input-bordered w-full bg-input border-border-base text-txt-primary"
+              value={artboard.width}
+              onChange={(e) => onUpdateArtboard({ width: Number(e.target.value) })}
             />
           </div>
+
+          <div className="form-control w-full mb-2">
+            <label className="label">
+              <span className="label-text text-txt-muted">Height (px)</span>
+            </label>
+            <input
+              type="number"
+              className="input input-bordered w-full bg-input border-border-base text-txt-primary"
+              value={artboard.height}
+              onChange={(e) => onUpdateArtboard({ height: Number(e.target.value) })}
+            />
+          </div>
+
+          <div className="form-control w-full mb-2">
+            <label className="label">
+              <span className="label-text text-txt-muted">Background Color</span>
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="color"
+                className="input input-bordered w-10 h-10 p-1 bg-input border-border-base"
+                value={artboard.background}
+                onChange={(e) => onUpdateArtboard({ background: e.target.value })}
+              />
+              <input
+                type="text"
+                className="input input-bordered flex-1 bg-input border-border-base text-txt-primary uppercase"
+                value={artboard.background}
+                onChange={(e) => onUpdateArtboard({ background: e.target.value })}
+              />
+            </div>
+          </div>
         </div>
+
+        {/* Layers Section */}
+        <LayersSection items={items} onSelect={onSelect} selectedId={selectedId} />
       </div>
     );
   }

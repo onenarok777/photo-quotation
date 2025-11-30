@@ -39,7 +39,10 @@ export const PhotosPanel: React.FC<PhotosPanelProps> = ({ onSelectImage }) => {
       if (pageNum === 1) {
         setImages(data);
       } else {
-        setImages(prev => [...prev, ...data]);
+        setImages(prev => {
+          const newImages = data.filter(newImg => !prev.some(prevImg => prevImg.id === newImg.id));
+          return [...prev, ...newImages];
+        });
       }
       setHasMore(data.length > 0);
       setPage(pageNum);
@@ -57,7 +60,10 @@ export const PhotosPanel: React.FC<PhotosPanelProps> = ({ onSelectImage }) => {
       if (pageNum === 1) {
         setImages(data);
       } else {
-        setImages(prev => [...prev, ...data]);
+        setImages(prev => {
+          const newImages = data.filter(newImg => !prev.some(prevImg => prevImg.id === newImg.id));
+          return [...prev, ...newImages];
+        });
       }
       setHasMore(data.length > 0);
       setPage(pageNum);
@@ -106,8 +112,12 @@ export const PhotosPanel: React.FC<PhotosPanelProps> = ({ onSelectImage }) => {
             {images.map((img) => (
               <div 
                 key={img.id} 
-                className="relative group cursor-pointer overflow-hidden rounded-lg bg-input break-inside-avoid"
-                onClick={() => onSelectImage?.(img.urls.regular)}
+                className="relative group cursor-pointer overflow-hidden rounded-lg break-inside-avoid"
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData('image/url', img.urls.regular);
+                  e.dataTransfer.effectAllowed = 'copy';
+                }}
               >
                 <img 
                   src={img.urls.small} 
