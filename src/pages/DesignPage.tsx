@@ -52,7 +52,7 @@ export const DesignPage = () => {
         }} />;
       case 'photos':
         return <PhotosPanel 
-          onSelectImage={(url) => addElementImage(url, 250, 250)}
+          onSelectImage={(url, width, height) => addElementImage(url, 250, 250, width, height)}
         />;
       default:
         return null; 
@@ -103,7 +103,7 @@ export const DesignPage = () => {
                   artboard={artboard}
                   onSelect={handleSelectElement}
                   onChange={updateElementProps}
-                  onDropImage={(url, x, y) => addElementImage(url, x, y)}
+                  onDropImage={(url, x, y, width, height) => addElementImage(url, x, y, width, height)}
                 />
               ) : (
                 <div className="text-txt-muted flex flex-col items-center gap-4 transition-colors duration-300">

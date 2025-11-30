@@ -9,6 +9,8 @@ export interface UnsplashImage {
     full: string;
   };
   alt_description: string;
+  width: number;
+  height: number;
   user: {
     name: string;
     username: string;

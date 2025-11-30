@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 import { searchImages, getPhotos, type UnsplashImage } from '@/services/unsplash';
 
 interface PhotosPanelProps {
-  onSelectImage?: (url: string) => void;
+  onSelectImage?: (url: string, width: number, height: number) => void;
 }
 
 export const PhotosPanel: React.FC<PhotosPanelProps> = ({ onSelectImage }) => {
@@ -115,9 +115,13 @@ export const PhotosPanel: React.FC<PhotosPanelProps> = ({ onSelectImage }) => {
                 className="relative group cursor-pointer overflow-hidden rounded-lg break-inside-avoid"
                 draggable
                 onDragStart={(e) => {
+                  console.log('Drag started', img);
                   e.dataTransfer.setData('image/url', img.urls.regular);
+                  if (img.width) e.dataTransfer.setData('image/width', img.width.toString());
+                  if (img.height) e.dataTransfer.setData('image/height', img.height.toString());
                   e.dataTransfer.effectAllowed = 'copy';
                 }}
+                onClick={() => onSelectImage?.(img.urls.regular, img.width, img.height)}
               >
                 <img 
                   src={img.urls.small} 

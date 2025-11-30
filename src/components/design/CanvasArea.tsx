@@ -12,7 +12,7 @@ interface CanvasAreaProps {
   artboard: Artboard;
   onSelect: (id: string | null) => void;
   onChange: (id: string, attrs: any) => void;
-  onDropImage?: (url: string, x: number, y: number) => void;
+  onDropImage?: (url: string, x: number, y: number, width?: number, height?: number) => void;
 }
 
 const URLImage = ({ image, ...props }: any) => {
@@ -126,6 +126,80 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
     <div 
       ref={containerRef}
       className="flex-1 bg-canvas overflow-hidden flex justify-center items-center relative w-full h-full"
+      onDragOver={(e) => {
+        e.preventDefault();
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        
+        const stage = stageRef.current;
+        if (!stage) return;
+
+        stage.setPointersPositions(e);
+        const pointerPosition = stage.getPointerPosition();
+        
+        if (!pointerPosition) return;
+
+        const x = (pointerPosition.x - stage.x()) / stage.scaleX();
+        const y = (pointerPosition.y - stage.y()) / stage.scaleY();
+
+        // Handle internal image drag (from Photos panel)
+        const imageUrl = e.dataTransfer.getData('image/url');
+        if (imageUrl) {
+           const width = parseInt(e.dataTransfer.getData('image/width') || '0');
+           const height = parseInt(e.dataTransfer.getData('image/height') || '0');
+           
+           if (onDropImage) {
+             onDropImage(imageUrl, x, y, width || undefined, height || undefined);
+           }
+           return;
+        }
+
+        // Handle external image drag (e.g. from other websites)
+        console.log('Drop event types:', e.dataTransfer.types);
+        const uriList = e.dataTransfer.getData('text/uri-list');
+        const textPlain = e.dataTransfer.getData('text/plain');
+        const textHtml = e.dataTransfer.getData('text/html');
+        console.log('uri-list:', uriList);
+        console.log('text/plain:', textPlain);
+        console.log('text/html:', textHtml);
+
+        let externalUrl = uriList || textPlain;
+
+        // Try to extract src from HTML if available and no URL found yet
+        if (!externalUrl && textHtml) {
+          const srcMatch = textHtml.match(/src=["'](.*?)["']/);
+          if (srcMatch) {
+            externalUrl = srcMatch[1];
+            console.log('Extracted URL from HTML:', externalUrl);
+          }
+        }
+
+        if (externalUrl && (externalUrl.startsWith('http') || externalUrl.startsWith('data:image'))) {
+           // Clean up URL if it contains multiple lines or extra text
+           externalUrl = externalUrl.split('\n')[0].trim();
+           
+           if (onDropImage) {
+             onDropImage(externalUrl, x, y);
+           }
+           return;
+        }
+
+        // Handle file drop (from desktop)
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+          const file = files[0];
+          if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              if (typeof reader.result === 'string' && onDropImage) {
+                onDropImage(reader.result, x, y);
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+      }}
     >
       {/* ... (Background Pattern) */}
 
@@ -140,72 +214,6 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
         scaleY={scale}
         x={position.x}
         y={position.y}
-        onDragOver={(e: any) => {
-          e.evt.preventDefault();
-        }}
-        onDrop={(e: any) => {
-          e.evt.preventDefault();
-          
-          const stage = stageRef.current;
-          stage.setPointersPositions(e.evt);
-          const pointerPosition = stage.getPointerPosition();
-          const x = (pointerPosition.x - stage.x()) / stage.scaleX();
-          const y = (pointerPosition.y - stage.y()) / stage.scaleY();
-
-          // Handle internal image drag (from Photos panel)
-          const imageUrl = e.evt.dataTransfer.getData('image/url');
-          if (imageUrl) {
-             if (onDropImage) {
-               onDropImage(imageUrl, x, y);
-             }
-             return;
-          }
-
-          // Handle external image drag (e.g. from other websites)
-          console.log('Drop event types:', e.evt.dataTransfer.types);
-          const uriList = e.evt.dataTransfer.getData('text/uri-list');
-          const textPlain = e.evt.dataTransfer.getData('text/plain');
-          const textHtml = e.evt.dataTransfer.getData('text/html');
-          console.log('uri-list:', uriList);
-          console.log('text/plain:', textPlain);
-          console.log('text/html:', textHtml);
-
-          let externalUrl = uriList || textPlain;
-
-          // Try to extract src from HTML if available and no URL found yet
-          if (!externalUrl && textHtml) {
-            const srcMatch = textHtml.match(/src=["'](.*?)["']/);
-            if (srcMatch) {
-              externalUrl = srcMatch[1];
-              console.log('Extracted URL from HTML:', externalUrl);
-            }
-          }
-
-          if (externalUrl && (externalUrl.startsWith('http') || externalUrl.startsWith('data:image'))) {
-             // Clean up URL if it contains multiple lines or extra text
-             externalUrl = externalUrl.split('\n')[0].trim();
-             
-             if (onDropImage) {
-               onDropImage(externalUrl, x, y);
-             }
-             return;
-          }
-
-          // Handle file drop (from desktop)
-          const files = e.evt.dataTransfer.files;
-          if (files && files.length > 0) {
-            const file = files[0];
-            if (file.type.startsWith('image/')) {
-              const reader = new FileReader();
-              reader.onload = () => {
-                if (typeof reader.result === 'string' && onDropImage) {
-                  onDropImage(reader.result, x, y);
-                }
-              };
-              reader.readAsDataURL(file);
-            }
-          }
-        }}
       >
         <Layer>
           {/* Artboard Background */}
@@ -221,7 +229,7 @@ export const CanvasArea: React.FC<CanvasAreaProps> = ({
             shadowOffset={{ x: 0, y: 20 }}
           />
 
-          {items.map((item, i) => {
+          {items.map((item) => {
             const commonProps = {
               id: item.id,
               x: item.x,
